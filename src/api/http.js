@@ -4,7 +4,9 @@ import { Message } from "element-ui";
 
 // 1. 创建 axios 实例
 const service = axios.create({
-  baseURL: "/music", // 改为相对路径，让Nginx去代理转发
+  // 根据你的环境配置，这里保持你原有的逻辑
+
+  baseURL: "http://localhost:8085/music",
   timeout: 5000,
   withCredentials: true,
   headers: {
@@ -12,7 +14,7 @@ const service = axios.create({
   },
 });
 
-// 2. 处理登录过期 (核心修复)
+// 2. 处理登录过期
 function handleLoginExpire() {
   // 防止短时间内重复弹出提示
   if (document.querySelector(".el-message--error")) return;
@@ -22,26 +24,17 @@ function handleLoginExpire() {
     duration: 2000,
   });
 
-  // 【核心修复步骤 1】清除 localStorage (用户信息)
-  // 对应 src/store/user.js 中的存储键名
+  // 清除所有本地缓存
   localStorage.removeItem("userId");
   localStorage.removeItem("username");
   localStorage.removeItem("avator");
-  localStorage.removeItem("user"); // 防止有其他别名，一并清除
-
-  // 【核心修复步骤 2】清除 sessionStorage (登录状态)
-  // 对应 src/store/configure.js 中的存储键名
-  // 如果不清除这个，页面刷新后 Header 依然认为你已登录，从而隐藏注册按钮
+  localStorage.removeItem("user");
   sessionStorage.removeItem("loginIn");
 
-  // 也可以选择直接清空所有缓存，最彻底
-  // sessionStorage.clear();
-
-  // 【核心修复步骤 3】跳转逻辑
+  // 延迟跳转，让用户看清提示
   setTimeout(() => {
-    // 强制刷新并跳转到登录页（根据你的路由配置，"/" 是登录页）
-    // 使用 location.href 可以确保 Vuex 状态被完全重置，避免按钮显示异常
-    window.location.href = "/";
+    // 强制跳转到登录页
+    window.location.href = "/login-in";
   }, 1000);
 }
 
@@ -72,7 +65,6 @@ service.interceptors.response.use(
           handleLoginExpire();
           break;
         case 403:
-          // 403 有时也是 token 失效
           handleLoginExpire();
           break;
         case 404:
@@ -91,7 +83,7 @@ service.interceptors.response.use(
   }
 );
 
-// 5. 导出封装方法 (保持原有结构以便兼容)
+// 5. 导出封装方法
 export function get(url, params = {}) {
   return service.get(url, { params });
 }

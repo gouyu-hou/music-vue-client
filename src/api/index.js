@@ -7,6 +7,8 @@ import { get, post } from "./http";
 export const loginIn = (params) => post(`consumer/login/status`, params);
 // 注册
 export const SignUp = (params) => post(`consumer/add`, params);
+// 【新增】退出登录 (注意：请核对你的后端接口路径是否为 /consumer/logout)
+export const signOut = () => get("consumer/logout");
 // 更新用户信息
 export const updateUserMsg = (params) => post(`consumer/client/update`, params);
 // 返回指定ID的用户
