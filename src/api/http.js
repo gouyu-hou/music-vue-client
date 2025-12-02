@@ -4,8 +4,7 @@ import { Message } from "element-ui";
 
 // 1. 创建 axios 实例
 const service = axios.create({
-  // 根据你的环境配置，这里保持你原有的逻辑
-  baseURL: "http://localhost:8085/music",
+  baseURL: "/music", // 改为相对路径，让Nginx去代理转发
   timeout: 5000,
   withCredentials: true,
   headers: {
