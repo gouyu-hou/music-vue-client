@@ -18,15 +18,18 @@ const song = {
     volume: 50,
   },
   getters: {
-    picUrl: (state) => {
-      let picUrl = state.picUrl;
-      if (!picUrl) {
-        // 🔥 【修复】使用 require 引入本地资源，Webpack 会自动处理路径
-        picUrl =
-          JSON.parse(window.sessionStorage.getItem("picUrl")) ||
-          require("@/assets/img/tubiao.jpg");
+    isPlay: (state) => state.isPlay,
+    // 🔥🔥🔥 修改这里：增加 || '#icon-bofang' 默认值
+    playButtonUrl: (state) => {
+      let playButtonUrl = state.playButtonUrl;
+      if (!playButtonUrl) {
+        // 如果缓存里也没有，默认给一个播放图标
+        playButtonUrl =
+          JSON.parse(
+            window.sessionStorage.getItem("playButtonUrl") || "null"
+          ) || "#icon-bofang";
       }
-      return picUrl;
+      return playButtonUrl;
     },
     id: (state) => {
       let id = state.id;
