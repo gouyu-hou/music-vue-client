@@ -1,72 +1,83 @@
 const configure = {
   state: {
-    HOST: 'http://localhost:8085',
-    loginIn: false, // 用户是否登录
-    searchword: '', // 搜索关键词
+    // 🔥 【核心修改】直接读取环境变量，不要写死 localhost
+    HOST: process.env.API_HOST,
+    loginIn: false,
+    searchword: "", // 搜索关键词
     showAside: false, // 是否显示侧边栏
-    activeName: '', // 歌单类型名
+    activeName: "", // 歌单类型名
     index: 0, // 列表中的序号
-    isActive: false
+    isActive: false,
   },
   getters: {
-    isActive: state => {
-      let isActive = state.isActive
+    isActive: (state) => {
+      let isActive = state.isActive;
       if (!isActive) {
-        isActive = JSON.parse(window.sessionStorage.getItem('isActive') || null)
+        isActive = JSON.parse(
+          window.sessionStorage.getItem("isActive") || null
+        );
       }
-      return isActive
+      return isActive;
     },
-    loginIn: state => {
-      let loginIn = state.loginIn
+    loginIn: (state) => {
+      let loginIn = state.loginIn;
       if (!loginIn) {
-        loginIn = JSON.parse(window.sessionStorage.getItem('loginIn') || null)
+        loginIn = JSON.parse(window.sessionStorage.getItem("loginIn") || null);
       }
-      return loginIn
+      return loginIn;
     },
-    activeName: state => {
-      let activeName = state.activeName
+    activeName: (state) => {
+      let activeName = state.activeName;
       if (!activeName) {
-        activeName = JSON.parse(window.sessionStorage.getItem('activeName') || null)
+        activeName = JSON.parse(
+          window.sessionStorage.getItem("activeName") || null
+        );
       }
-      return activeName
+      return activeName;
     },
-    showAside: state => {
-      let showAside = state.showAside
+    showAside: (state) => {
+      let showAside = state.showAside;
       if (!showAside) {
-        showAside = JSON.parse(window.sessionStorage.getItem('showAside') || null)
+        showAside = JSON.parse(
+          window.sessionStorage.getItem("showAside") || null
+        );
       }
-      return showAside
+      return showAside;
     },
-    index: state => {
-      let index = state.index
+    index: (state) => {
+      let index = state.index;
       if (!index) {
-        index = JSON.parse(window.sessionStorage.getItem('index') || null)
+        index = JSON.parse(window.sessionStorage.getItem("index") || null);
       }
-      return index
+      return index;
     },
-    searchword: state => state.searchword
+    searchword: (state) => state.searchword,
   },
   mutations: {
     setIsActive: (state, isActive) => {
-      state.isActive = isActive
-      window.sessionStorage.setItem('isActive', JSON.stringify(isActive))
+      state.isActive = isActive;
+      window.sessionStorage.setItem("isActive", JSON.stringify(isActive));
     },
     setLoginIn: (state, loginIn) => {
-      state.loginIn = loginIn
-      window.sessionStorage.setItem('loginIn', JSON.stringify(loginIn))
+      state.loginIn = loginIn;
+      window.sessionStorage.setItem("loginIn", JSON.stringify(loginIn));
     },
     setActiveName: (state, activeName) => {
-      state.activeName = activeName
-      window.sessionStorage.setItem('activeName', JSON.stringify(activeName))
+      state.activeName = activeName;
+      window.sessionStorage.setItem("activeName", JSON.stringify(activeName));
     },
     setShowAside: (state, showAside) => {
-      state.showAside = showAside
-      window.sessionStorage.setItem('showAside', JSON.stringify(showAside))
+      state.showAside = showAside;
+      window.sessionStorage.setItem("showAside", JSON.stringify(showAside));
     },
-    setIndex: (state, index) => { state.index = index },
-    setSearchword: (state, searchword) => { state.searchword = searchword }
+    setIndex: (state, index) => {
+      state.index = index;
+    },
+    setSearchword: (state, searchword) => {
+      state.searchword = searchword;
+    },
   },
-  actions: {}
-}
+  actions: {},
+};
 
-export default configure
+export default configure;
