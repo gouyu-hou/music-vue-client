@@ -23,11 +23,11 @@
     <ul class="popular" v-for="(item, index) in commentList" :key="index">
       <li>
         <div class="popular-img">
-          <img :src="attachImageUrl(userPic[index])" alt="" />
+          <img :src="attachImageUrl(item.avator)" alt="" />
         </div>
         <div class="popular-msg">
           <ul>
-            <li class="name">{{ userName[index] }}</li>
+            <li class="name">{{ item.username }}</li>
             <li class="time">{{ item.createTime }}</li>
             <li class="content">{{ item.content }}</li>
           </ul>
@@ -58,8 +58,7 @@ export default {
   data() {
     return {
       commentList: [], // 存放评论内容
-      userPic: [], // 保存评论用户头像
-      userName: [], // 保存评论用户名字
+      // 🔥 修改点 3：删除了 userPic 和 userName 数组，不再需要它们
       textarea: "", // 存放输入内容
     };
   },
@@ -87,7 +86,8 @@ export default {
         .then((res) => {
           this.commentList = res.list;
           for (let item of res.list) {
-            this.getUsers(item.userId);
+            // 🔥 修改点 4：将 item (评论对象) 传递过去
+            this.getUsers(item.userId, item);
           }
         })
         .catch((err) => {
@@ -95,11 +95,15 @@ export default {
         });
     },
     // 获取评论用户的昵称和头像
-    getUsers(id) {
+    // 🔥 修改点 5：接收 item 参数，将数据直接挂载到 item 上
+    getUsers(id, item) {
       getUserOfId(id)
         .then((res) => {
-          this.userPic.push(res.consumer.avator);
-          this.userName.push(res.consumer.username);
+          // 使用 $set 保证 Vue 能检测到新添加属性的变化
+          if (res.consumer) {
+            this.$set(item, "avator", res.consumer.avator);
+            this.$set(item, "username", res.consumer.username);
+          }
         })
         .catch((err) => {
           console.log(err);
