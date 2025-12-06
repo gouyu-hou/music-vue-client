@@ -115,11 +115,23 @@ export default {
   methods: {
     SignUp() {
       let _this = this;
-      let d = this.registerForm.birth;
-      let datetime =
-        d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+
+      // 1. 参数校验 (防止 birth 为空报错)
+      if (!this.registerForm.birth) {
+        this.notify("请选择出生日期", "error");
+        return;
+      }
+
+      // --- 修复开始 ---
+      let d = new Date(this.registerForm.birth);
+      let month = (d.getMonth() + 1).toString().padStart(2, "0");
+      let day = d.getDate().toString().padStart(2, "0");
+      let datetime = d.getFullYear() + "-" + month + "-" + day;
+      // --- 修复结束 ---
+
       let params = new URLSearchParams();
       params.append("username", this.registerForm.username);
+      // ... (后续代码保持不变)
       params.append("password", this.registerForm.password);
       params.append("sex", this.registerForm.sex);
       params.append("phoneNum", this.registerForm.phoneNum);
@@ -138,7 +150,9 @@ export default {
               _this.$router.push({ path: "/" });
             }, 2000);
           } else {
-            _this.notify("注册失败", "error");
+            // 🔥🔥🔥 修改这里：优先显示后端返回的 msg 错误信息
+            // 如果 res.msg 存在，就显示它（比如"手机号格式错误"），否则显示默认的"注册失败"
+            _this.notify(res.msg || "注册失败", "error");
           }
         })
         .catch((err) => {
