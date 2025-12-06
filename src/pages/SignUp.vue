@@ -115,11 +115,17 @@ export default {
   methods: {
     SignUp() {
       let _this = this;
-      let d = this.registerForm.birth;
-      let datetime =
-        d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+      // --- 修复开始 ---
+      let d = new Date(this.registerForm.birth);
+      // 确保月份和日期是两位数 (yyyy-MM-dd)
+      let month = (d.getMonth() + 1).toString().padStart(2, '0');
+      let day = d.getDate().toString().padStart(2, '0');
+      let datetime = d.getFullYear() + "-" + month + "-" + day;
+      // --- 修复结束 ---
+      
       let params = new URLSearchParams();
       params.append("username", this.registerForm.username);
+      // ... 其他代码保持不变
       params.append("password", this.registerForm.password);
       params.append("sex", this.registerForm.sex);
       params.append("phoneNum", this.registerForm.phoneNum);
@@ -130,20 +136,22 @@ export default {
       params.append("avator", "/music/img/user.jpg");
       //调用api中SignUp的函数、发起请求
       SignUp(params)
-        .then((res) => {
-          console.log(res);
-          if (res.code === 1) {
-            _this.notify("注册成功", "success");
-            setTimeout(function () {
-              _this.$router.push({ path: "/" });
-            }, 2000);
-          } else {
-            _this.notify("注册失败", "error");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    .then((res) => {
+      console.log(res);
+      if (res.code === 1) {
+        _this.notify("注册成功", "success");
+        setTimeout(function () {
+          _this.$router.push({ path: "/" });
+        }, 2000);
+      } else {
+        // 🔥🔥🔥 修改这里：优先显示后端返回的 msg 错误信息
+        // 如果 res.msg 存在，就显示它（比如"手机号格式错误"），否则显示默认的"注册失败"
+        _this.notify(res.msg || "注册失败", "error");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
     },
     goback(index) {
       this.$router.go(index);
