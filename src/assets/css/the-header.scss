@@ -83,8 +83,12 @@
     border-radius: $header-user-radius;
     margin: $header-user-margin;
     cursor: pointer;
+    
+    // 🔥 修改这里
     img {
       width: 100%;
+      height: 100%;       /* 新增：强制高度填满圆形容器 */
+      object-fit: cover;  /* 新增：保持比例裁剪，确保头像居中且不被拉伸 */
     }
   }
 }
