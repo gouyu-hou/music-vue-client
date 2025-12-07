@@ -18,7 +18,8 @@
 
 // ... 前面的代码保持不变
 .album-slide {
-  // ...
+  float: left;
+    width: 400px;
   .album-img {
     height: 200px;
     width: 200px;

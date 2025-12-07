@@ -7,6 +7,7 @@
         drag
         :action="uploadUrl()"
         :show-file-list="false"
+        :with-credentials="true"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload"
       >
