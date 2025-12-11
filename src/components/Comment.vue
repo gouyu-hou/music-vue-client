@@ -32,12 +32,16 @@
             <li class="content">{{ item.content }}</li>
           </ul>
         </div>
+<<<<<<< HEAD
         <div
           class="up"
           ref="up"
           :class="{ 'is-liked': item.isLike }"
           @click="postUp(item.id, item.up, index, item.isLike)"
         >
+=======
+        <div class="up" ref="up" @click="postUp(item.id, item.up, index)">
+>>>>>>> 44cebb7d3996985dd86822d1844bd0a138325f6d
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-zan"></use>
           </svg>
